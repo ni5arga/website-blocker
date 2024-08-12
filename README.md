@@ -1,6 +1,6 @@
 
 
-# Website Blocker 
+# Website Blocker
 
 ## Overview
 
@@ -16,19 +16,20 @@ A Go utility to block and unblock websites by modifying the `hosts` file on Wind
    go mod download
    ```
 
-2. **Build the Applications**
+2. **Build the Executables**
 
    ```bash
-   go build
+   go build -o blocker blocker.go
+   go build -o fallback fallback.go
    ```
 
-   This command installs all dependencies and builds the `website_blocker` and `fallback` executables.
+   This will create the `blocker` and `fallback` executables.
 
 ## Configuration
 
 1. **Create `sites.txt`**
 
-   List websites to manage, one per line.
+   List the websites to block or unblock, one per line:
 
    ```
    www.example.com
@@ -38,24 +39,24 @@ A Go utility to block and unblock websites by modifying the `hosts` file on Wind
 
 2. **Edit Time Limits**
 
-   Open `website_blocker.go` and modify the `startBlock` and `endBlock` variables to set the blocking time range:
+   Modify the `startBlock` and `endBlock` variables in `website_blocker.go` to set your desired blocking times:
 
    ```go
    var (
-       startBlock = "09:00" // Time to start blocking
-       endBlock   = "17:00" // Time to stop blocking
+       startBlock = "09:00" // Blocking start time
+       endBlock   = "17:00" // Blocking end time
    )
    ```
 
 3. **Adjust Host Path (if needed)**
 
-   The default path to the `hosts` file is set automatically based on the operating system. Adjust it in `website_blocker.go` and `fallback.go` if necessary.
+   The path to the `hosts` file is set automatically based on your operating system. Change it in `website_blocker.go` and `fallback.go` if necessary.
 
 ## Usage
 
 ### Website Blocker
 
-Run the blocker:
+Run the blocker with:
 
 ```bash
 ./website_blocker
@@ -63,7 +64,7 @@ Run the blocker:
 
 ### Fallback Unblocker
 
-Run the fallback unblocker:
+To unblock all sites immediately, run:
 
 ```bash
 sudo ./fallback
@@ -71,7 +72,7 @@ sudo ./fallback
 
 ## Emergency Use
 
-Use the `fallback` script to unblock all sites immediately.
+Use the `fallback` script to unblock all sites immediately in case of an emergency.
 
 ## Output
 
