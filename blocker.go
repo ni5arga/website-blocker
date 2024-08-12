@@ -2,13 +2,12 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 	"runtime"
 	"strings"
 	"time"
-
-	"github.com/fatih/color"
 )
 
 var (
@@ -18,22 +17,35 @@ var (
 	endBlock    = "17:00"
 	sitesFile   = "sites.txt"
 	websiteList []string
+	isFallback  bool
 )
 
 func init() {
-	// Detect the operating system
+	// OS detection
 	switch runtime.GOOS {
 	case "windows":
 		hostsPath = "C:\\Windows\\System32\\drivers\\etc\\hosts"
 	case "linux", "darwin": // "darwin" is macOS
 		hostsPath = "/etc/hosts"
 	default:
-		color.Red("Unsupported operating system: %s", runtime.GOOS)
+		fmt.Printf("Unsupported operating system: %s\n", runtime.GOOS)
 		os.Exit(1)
 	}
+
+
+	// removing fallback cuz i end up using it as a workaround 
+
+	// fallback
+	// flag.BoolVar(&isFallback, "fallback", false, "Run in fallback mode to unblock all sites")
+	flag.Parse() 
 }
 
 func main() {
+	if isFallback {
+		// unblockWebsites()
+		return
+	}
+
 	loadWebsites()
 
 	for {
@@ -49,7 +61,6 @@ func main() {
 			unblockWebsites()
 		}
 
-		// Check every minute
 		time.Sleep(1 * time.Minute)
 	}
 }
@@ -57,7 +68,7 @@ func main() {
 func loadWebsites() {
 	file, err := os.Open(sitesFile)
 	if err != nil {
-		color.Red("Error reading %s: %v", sitesFile, err)
+		fmt.Printf("Error reading %s: %v\n", sitesFile, err)
 		return
 	}
 	defer file.Close()
@@ -71,28 +82,39 @@ func loadWebsites() {
 	}
 
 	if err := scanner.Err(); err != nil {
-		color.Red("Error scanning %s: %v", sitesFile, err)
+		fmt.Printf("Error scanning %s: %v\n", sitesFile, err)
 	}
 }
 
 func blockWebsites() {
 	content, err := os.ReadFile(hostsPath)
 	if err != nil {
-		color.Red("Error reading hosts file: %v", err)
+		fmt.Printf("Error reading hosts file: %v\n", err)
 		return
 	}
 
+	// Create a map to keep track of already blocked websites
+	blockedMap := make(map[string]bool)
+	for _, line := range strings.Split(string(content), "\n") {
+		if strings.HasPrefix(line, redirectIP) {
+			parts := strings.SplitN(line, " ", 2)
+			if len(parts) == 2 {
+				blockedMap[parts[1]] = true
+			}
+		}
+	}
+
 	for _, website := range websiteList {
-		if !strings.Contains(string(content), website) {
+		if _, exists := blockedMap[website]; !exists {
 			entry := fmt.Sprintf("%s %s\n", redirectIP, website)
 			err := appendToFile(hostsPath, entry)
 			if err != nil {
-				color.Red("Error writing to hosts file: %v", err)
+				fmt.Printf("Error writing to hosts file: %v\n", err)
 			} else {
-				color.Green("Blocked %s", website)
+				fmt.Printf("Blocked %s\n", website)
 			}
 		} else {
-			color.Yellow("%s is already blocked.", website)
+			fmt.Printf("%s is already blocked.\n", website)
 		}
 	}
 }
@@ -100,7 +122,7 @@ func blockWebsites() {
 func unblockWebsites() {
 	file, err := os.Open(hostsPath)
 	if err != nil {
-		color.Red("Error opening hosts file: %v", err)
+		fmt.Printf("Error opening hosts file: %v\n", err)
 		return
 	}
 	defer file.Close()
@@ -122,15 +144,15 @@ func unblockWebsites() {
 	}
 
 	if err := scanner.Err(); err != nil {
-		color.Red("Error scanning hosts file: %v", err)
+		fmt.Printf("Error scanning hosts file: %v\n", err)
 		return
 	}
 
 	err = os.WriteFile(hostsPath, []byte(strings.Join(lines, "\n")), 0644)
 	if err != nil {
-		color.Red("Error writing to hosts file: %v", err)
+		fmt.Printf("Error writing to hosts file: %v\n", err)
 	} else {
-		color.Green("Unblocked all specified websites.")
+		fmt.Println("Unblocked all specified websites.")
 	}
 }
 
