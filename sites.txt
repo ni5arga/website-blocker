@@ -1,0 +1,11 @@
+www.example.com
+example.com
+discord.com
+cdn.discordapp.com
+reddit.com
+*.reddit.com
+instagram.com
+twitter.com
+x.com
+crunchyroll.com
+netflix.com
