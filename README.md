@@ -50,7 +50,7 @@ A Go utility to block and unblock websites by modifying the `hosts` file on Wind
 
 3. **Adjust Host Path (if needed)**
 
-   The path to the `hosts` file is set automatically based on your operating system. Change it in `website_blocker.go` and `fallback.go` if necessary.
+   The path to the `hosts` file is set automatically based on your operating system. Change it in `blocker.go` and `fallback.go` if necessary.
 
 ## Usage
 
@@ -59,7 +59,7 @@ A Go utility to block and unblock websites by modifying the `hosts` file on Wind
 Run the blocker with:
 
 ```bash
-./website_blocker
+./blocker
 ```
 
 ### Fallback Unblocker
