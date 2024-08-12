@@ -59,7 +59,7 @@ A Go utility to block and unblock websites by modifying the `hosts` file on Wind
 Run the blocker with:
 
 ```bash
-./blocker
+sudo go run blocker.go
 ```
 
 ### Fallback Unblocker
@@ -67,7 +67,7 @@ Run the blocker with:
 To unblock all sites immediately, run:
 
 ```bash
-sudo ./fallback
+sudo go run fallback.go
 ```
 
 ## Emergency Use
