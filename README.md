@@ -8,7 +8,7 @@ A Go utility to block and unblock websites by modifying the `hosts` file on Wind
 
 ## Installation
 
-1. **Clone the Repository & Install Dependencies**
+1. **Clone the Repository**
 
    ```bash
    git clone https://github.com/ni5arga/website-blocker
@@ -16,14 +16,13 @@ A Go utility to block and unblock websites by modifying the `hosts` file on Wind
    go mod download
    ```
 
-2. **Build the Executables**
+2. **Build the Executable**
 
    ```bash
-   go build -o blocker blocker.go
-   go build -o fallback fallback.go
+   go build -o blocker.exe blocker.go
    ```
 
-   This will create the `blocker` and `fallback` executables.
+   This will create the `blocker.exe` executables.
 
 ## Configuration
 
@@ -50,7 +49,7 @@ A Go utility to block and unblock websites by modifying the `hosts` file on Wind
 
 3. **Adjust Host Path (if needed)**
 
-   The path to the `hosts` file is set automatically based on your operating system. Change it in `blocker.go` and `fallback.go` if necessary.
+   The path to the `hosts` file is set automatically based on your operating system. Change it in `blocker.go` if necessary.
 
 ## Usage
 
@@ -61,18 +60,6 @@ Run the blocker with:
 ```bash
 sudo go run blocker.go
 ```
-
-### Fallback Unblocker
-
-To unblock all sites immediately, run:
-
-```bash
-sudo go run fallback.go
-```
-
-## Emergency Use
-
-Use the `fallback` script to unblock all sites immediately in case of an emergency.
 
 ## Output
 
