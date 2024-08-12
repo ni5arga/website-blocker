@@ -39,7 +39,7 @@ A Go utility to block and unblock websites by modifying the `hosts` file on Wind
 
 2. **Edit Time Limits**
 
-   Modify the `startBlock` and `endBlock` variables in `website_blocker.go` to set your desired blocking times:
+   Modify the `startBlock` and `endBlock` variables in `blocker.go` to set your desired blocking times:
 
    ```go
    var (
